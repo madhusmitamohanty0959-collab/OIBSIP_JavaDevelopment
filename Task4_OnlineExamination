@@ -1,0 +1,126 @@
+import java.util.Scanner;
+
+class ATMInterface {
+    private double balance = 10000; // Initial Balance
+    private String transactionHistory = "";
+
+    // Show Menu
+    public void showMenu() {
+        System.out.println("\n===== ATM INTERFACE =====");
+        System.out.println("1. Transaction History");
+        System.out.println("2. Withdraw");
+        System.out.println("3. Deposit");
+        System.out.println("4. Transfer");
+        System.out.println("5. Quit");
+        System.out.print("Choose an option: ");
+    }
+
+    // Transaction History
+    public void transactionHistory() {
+        if (transactionHistory.isEmpty()) {
+            System.out.println("No transactions available.");
+        } else {
+            System.out.println("\n--- Transaction History ---");
+            System.out.println(transactionHistory);
+        }
+    }
+
+    // Withdraw Money
+    public void withdraw(double amount) {
+        if (amount <= balance) {
+            balance -= amount;
+            transactionHistory += "Withdrawn: ₹" + amount + "\n";
+            System.out.println("Withdrawal Successful!");
+            System.out.println("Remaining Balance: ₹" + balance);
+        } else {
+            System.out.println("Insufficient Balance!");
+        }
+    }
+
+    // Deposit Money
+    public void deposit(double amount) {
+        balance += amount;
+        transactionHistory += "Deposited: ₹" + amount + "\n";
+        System.out.println("Deposit Successful!");
+        System.out.println("Current Balance: ₹" + balance);
+    }
+
+    // Transfer Money
+    public void transfer(double amount, String receiver) {
+        if (amount <= balance) {
+            balance -= amount;
+            transactionHistory += "Transferred ₹" + amount + " to " + receiver + "\n";
+            System.out.println("Transfer Successful!");
+            System.out.println("Remaining Balance: ₹" + balance);
+        } else {
+            System.out.println("Insufficient Balance!");
+        }
+    }
+
+    // Main Method
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // User Login
+        System.out.println("===== WELCOME TO ATM =====");
+        System.out.print("Enter User ID: ");
+        String userId = sc.nextLine();
+
+        System.out.print("Enter PIN: ");
+        String pin = sc.nextLine();
+
+        // Sample Login Validation
+        if (userId.equals("admin") && pin.equals("1234")) {
+
+            ATMInterface atm = new ATMInterface();
+            int choice;
+
+            do {
+                atm.showMenu();
+                choice = sc.nextInt();
+
+                switch (choice) {
+                    case 1:
+                        atm.transactionHistory();
+                        break;
+
+                    case 2:
+                        System.out.print("Enter amount to withdraw: ₹");
+                        double withdrawAmount = sc.nextDouble();
+                        atm.withdraw(withdrawAmount);
+                        break;
+
+                    case 3:
+                        System.out.print("Enter amount to deposit: ₹");
+                        double depositAmount = sc.nextDouble();
+                        atm.deposit(depositAmount);
+                        break;
+
+                    case 4:
+                        System.out.print("Enter receiver name: ");
+                        sc.nextLine(); // consume newline
+                        String receiver = sc.nextLine();
+
+                        System.out.print("Enter amount to transfer: ₹");
+                        double transferAmount = sc.nextDouble();
+
+                        atm.transfer(transferAmount, receiver);
+                        break;
+
+                    case 5:
+                        System.out.println("Thank You for Using ATM!");
+                        break;
+
+                    default:
+                        System.out.println("Invalid Choice!");
+                }
+
+            } while (choice != 5);
+
+        } else {
+            System.out.println("Invalid User ID or PIN!");
+        }
+
+        sc.close();
+    }
+}
